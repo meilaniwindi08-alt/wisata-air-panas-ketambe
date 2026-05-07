@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Wisata Pemandian Air Panas Ketambe</title>
+    <style>
+        :root {
+            --primary-blue: #004aad;
+            --accent-teal: #00b8d9;
+            --white: #ffffff;
+            --gray-bg: #f4f5f7;
+            --text-dark: #2c3e50;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--gray-bg);
+            margin: 0;
+            scroll-behavior: smooth;
+            color: var(--text-dark);
+        }
+
+        /* --- HEADER --- */
+        .main-header {
+            background: linear-gradient(rgba(0, 74, 173, 0.85), rgba(0, 74, 173, 0.85)), 
+                        url('https://images.unsplash.com/photo-1544178170-c9716182969a?auto=format&fit=crop&q=80&w=1200');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .main-header h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- STICKY NAV --- */
+        .nav-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .step-bar {
+            display: flex;
+            max-width: 1100px;
+            margin: 0 auto;
+            list-style: none;
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .step-item {
+            flex: 1;
+            padding: 18px 10px;
+            text-align: center;
+            text-decoration: none;
+            color: #7a869a;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-bottom: 4px solid transparent;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .step-item.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+            background: #f0f7ff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px 100px;
+        }
+
+        section {
+            background: var(--white);
+            margin-bottom: 40px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            scroll-margin-top: 100px;
+        }
+
+        h2 { color: var(--primary-blue); border-left: 6px solid var(--accent-teal); padding-left: 15px; margin-bottom: 25px; }
+
+        /* --- STEP 2: ACTOR SHAPES --- */
+        .actor-flex {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        .actor-shape-card {
+            flex: 1;
+            min-width: 280px;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .actor-shape-card:hover { border-color: var(--primary-blue); transform: translateY(-5px); }
+        .icon-circle {
+            width: 70px; height: 70px; border-radius: 50%;
+            margin: 0 auto 15px; display: flex; justify-content: center; align-items: center;
+            font-size: 2rem;
+        }
+        .bg-pengunjung { background: linear-gradient(135deg, #004aad, #00b8d9); color: white; }
+        .bg-admin { background: linear-gradient(135deg, #1e293b, #475569); color: white; }
+        .actor-label { font-weight: 800; font-size: 1.2rem; display: block; }
+        .actor-role-tag {
+            display: inline-block; padding: 3px 12px; border-radius: 50px;
+            font-size: 0.7rem; font-weight: bold; margin-bottom: 15px;
+        }
+        .tag-pengunjung { background: #e0f2fe; color: #0369a1; }
+        .tag-admin { background: #f1f5f9; color: #334155; }
+        .actor-points { text-align: left; font-size: 0.85rem; color: #64748b; list-style: none; padding: 0; }
+        .actor-points li { position: relative; padding-left: 20px; margin-bottom: 8px; }
+        .actor-points li::before { content: "✓"; position: absolute; left: 0; color: #22c55e; font-weight: bold; }
+
+       /* --- STYLE TAMBAHAN UNTUK STEP 3 (CHIPS STYLE) --- */
+        .sec-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .sec-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+        .orange { background: #fff7ed; color: #f97316; }
+        .sec-title { font-weight: 800; font-size: 1.3rem; color: var(--primary-blue); }
+        .sec-sub { font-size: 0.9rem; color: #64748b; }
+
+        .uc-section {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .uc-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #e2e8f0;
+        }
+        .uc-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .uc-actor-title { font-weight: 700; font-size: 1rem; text-transform: uppercase; }
+
+        .uc-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .uc-chip {
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        .chip-blue { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+        .chip-purple { background: #f3e8ff; color: #7e22ce; border-color: #e9d5ff; }
+        .uc-chip:hover { transform: scale(1.05); cursor: default; }
+
+        .tip-box {
+            background: #fffbeb;
+            border-left: 5px solid #f59e0b;
+            padding: 15px;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #92400e;
+            border-radius: 0 8px 8px 0;
+        }
+
+       /* --- STYLE KHUSUS STEP 4 (RELATIONSHIP CARDS) --- */
+        .rel-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 25px; 
+            margin-top: 20px;
+        }
+
+        .rel-card { 
+            background: #ffffff;
+            border: 1px solid #e2e8f0; 
+            border-radius: 16px; 
+            padding: 25px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.3s ease;
+        }
+
+        .rel-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-teal);
+        }
+
+        .rel-head { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            margin-bottom: 20px; 
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+        }
+
+        .rel-badge { 
+            font-size: 0.75rem; 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            color: white; 
+            letter-spacing: 0.5px;
+        }
+
+        .bg-inc { background: #10b981; } /* Emerald Green */
+        .bg-ext { background: #f59e0b; } /* Amber Orange */
+
+        .rel-list { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+        }
+
+        .rel-list li { 
+            font-size: 0.9rem; 
+            padding: 12px; 
+            background: #f8fafc;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            color: #475569; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .arrow-text { 
+            font-family: 'Courier New', Courier, monospace; 
+            font-weight: bold; 
+            color: var(--primary-blue);
+            background: #e0f2fe;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Responsif untuk HP */
+        @media (max-width: 768px) { 
+            .rel-grid { grid-template-columns: 1fr; } 
+        }
+
+        /* --- STEP 5: DIAGRAM --- */
+        .diagram-container {
+            border: 2px solid #e2e8f0; border-radius: 15px; padding: 40px 15px;
+            display: flex; justify-content: center; background: white;
+        }
+        .system-boundary {
+            border: 3px solid var(--primary-blue); background: #f0f7ff;
+            width: 100%; max-width: 850px; position: relative; padding: 30px;
+        }
+        .system-label {
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            background: white; padding: 0 15px; font-weight: bold; color: var(--primary-blue);
+            border: 1px solid var(--primary-blue); font-size: 0.8rem;
+        }
+        .upload-hint img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+     
+    .uml-box {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.uml-left {
+    width: 30%;
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+.uml-right {
+    width: 70%;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+/* ACTIVITY */
+.activity {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    text-align: center;
+}
+
+.lane-title {
+    font-weight: bold;
+    background: #f1f5f9;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.act {
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+
+.user { background: #d1fae5; }
+.sys { background: #e0f2fe; }
+
+.db {
+    background: #ede9fe;
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start, .end {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.start { background: black; }
+.end { border: 4px solid black; background: black; }
+
+.seq-adv {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* ACTOR */
+.actor {
+    font-weight: bold;
+    padding: 10px;
+}
+
+/* LIFELINE */
+.lifeline {
+    height: 300px;
+    border-left: 2px dashed #94a3b8;
+    margin: auto;
+}
+
+/* ACTIVATION BAR */
+.act-bar {
+    position: absolute;
+    width: 8px;
+    background: #475569;
+    opacity: 0;
+}
+
+.a1 { top: 80px; left: 24%; height: 120px; }
+.a2 { top: 120px; left: 49%; height: 120px; }
+.a3 { top: 160px; left: 74%; height: 100px; }
+
+/* ARROW LINE */
+.arrow-line {
+    position: absolute;
+    height: 2px;
+    opacity: 0;
+}
+
+/* REQUEST (GARIS SOLID →) */
+.req {
+    background: #0f172a;
+}
+.req::after {
+    content: "";
+    position: absolute;
+    right: -6px;
+    top: -4px;
+    border-left: 8px solid #0f172a;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+/* RETURN (GARIS PUTUS ←) */
+.return {
+    border-top: 2px dashed #0f172a;
+}
+.return::after {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: -4px;
+    border-right: 8px solid #0f172a;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+/* TEXT */
+.arrow-line span {
+    position: absolute;
+    top: -18px;
+    left: 10px;
+    font-size: 0.75rem;
+    background: white;
+    padding: 2px 6px;
+}
+
+/* POSISI */
+.m1 { top: 60px; left: 5%; width: 20%; }
+.m2 { top: 100px; left: 5%; width: 40%; }
+.m3 { top: 140px; left: 35%; width: 25%; }
+.m4 { top: 180px; left: 60%; width: 20%; }
+
+.r1 { top: 210px; left: 60%; width: 20%; }
+.r2 { top: 250px; left: 35%; width: 30%; }
+
+/* ANIMASI */
+.m1 { animation: draw 1s forwards 0s; }
+.m2 { animation: draw 1s forwards 1s; }
+.m3 { animation: draw 1s forwards 2s; }
+.m4 { animation: draw 1s forwards 3s; }
+
+.r1 { animation: draw 1s forwards 4s; }
+.r2 { animation: draw 1s forwards 5s; }
+
+.a1 { animation: fadeIn 1s forwards 1s; }
+.a2 { animation: fadeIn 1s forwards 2s; }
+.a3 { animation: fadeIn 1s forwards 3s; }
+
+@keyframes draw {
+    from { width: 0; opacity: 1; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* === IMAGE UML STYLE (STEP 6,7,8) === */
+.uml-img {
+    width: 100%;
+    max-width: 700px; /* batas biar ga kegedean */
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    object-fit: contain;
+}
+
+/* Optional: kalau mau ukuran beda */
+.uml-img.small { max-width: 400px; }
+.uml-img.medium { max-width: 600px; }
+.uml-img.large { max-width: 900px; }
+
+/* Biar ada efek hover dikit */
+.uml-img:hover {
+    transform: scale(1.02);
+    transition: 0.3s;
+}
+  
+</style>
+</head>
+<body>
+
+<header class="main-header">
+    <h1>Sistem Informasi Wisata Ketambe</h1>
+    <p>Dokumentasi Perancangan Sistem & Use Case Diagram</p>
+</header>
+
+<div class="nav-wrapper">
+    <nav class="step-bar">
+        <a href="#step1" class="step-item active">Step 1: Deskripsi</a>
+        <a href="#step2" class="step-item">Step 2: Aktor</a>
+        <a href="#step3" class="step-item">Step 3: Use Case</a>
+        <a href="#step4" class="step-item">Step 4: Hubungan</a>
+        <a href="#step5" class="step-item">Step 5: Diagram</a>
+        <a href="#step6" class="step-item">Step 6: Activity Diagram</a>
+        <a href="#step7" class="step-item">Step 7: Sequence Diagram</a>
+        <a href="#step8" class="step-item">Step 8: class Diagram</a>
+        <a href="#step9" class="step-item">Step 9: Diagram</a>
+        <a href="#step10" class="step-item">Step 10: Diagram</a>
+
+    </nav>
+</div>
+
+<div class="container">
+    
+    <section id="step1">
+    <h2>Step 1: Deskripsi Sistem</h2>
+    <p style="line-height: 1.8; color: #475569; text-align: justify;">
+        <strong>Sistem Informasi Wisata Pemandian Air Panas Ketambe</strong> merupakan platform digital yang dirancang untuk mengoptimalkan promosi dan manajemen informasi wisata alam di Ketambe. 
+        Sistem ini dibangun untuk memberikan aksesibilitas data bagi wisatawan secara mandiri, mulai dari eksplorasi fasilitas, dokumentasi galeri, hingga panduan lokasi geografis. 
+        Tujuan utamanya adalah menciptakan sinkronisasi informasi antara pengelola (Admin) dan wisatawan (Pengunjung) melalui satu pintu sistem yang terintegrasi.
+    </p>
+    </section>
+
+    <section id="step2">
+        <h2>Step 2: Identifikasi Aktor</h2>
+        <div class="actor-flex">
+            <div class="actor-shape-card">
+                <div class="icon-circle bg-pengunjung">👤</div>
+                <span class="actor-label">Pengunjung</span>
+                <span class="actor-role-tag tag-pengunjung">Primary Actor</span>
+                <ul class="actor-points">
+                    <li>Mencari informasi wisata.</li>
+                    <li>Melihat galeri & fasilitas.</li>
+                    <li>Mengirim pesan pertanyaan.</li>
+                </ul>
+            </div>
+            <div class="actor-shape-card">
+                <div class="icon-circle bg-admin">⚙️</div>
+                <span class="actor-label">Admin</span>
+                <span class="actor-role-tag tag-admin">Secondary Actor</span>
+                <ul class="actor-points">
+                    <li>Wajib Login (Keamanan).</li>
+                    <li>Update konten & galeri.</li>
+                    <li>Merespon pesan pengunjung.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="step3">
+        <div class="sec-header">
+            <div class="sec-icon orange">⚡</div>
+            <div>
+                <div class="sec-title">Step 3: Identifikasi Use Case</div>
+                <div class="sec-sub">Fungsionalitas apa saja yang disediakan sistem untuk masing-masing aktor? </div>
+            </div>
+        </div>
+
+        <div class="uc-section">
+            <div class="uc-header">
+                <div class="uc-dot" style="background:var(--accent-teal)"></div>
+                <div class="uc-actor-title" style="color:var(--accent-teal)">👤 Use Case: Pengunjung </div>
+            </div>
+            <div class="uc-chips">
+                <span class="uc-chip chip-blue">Melihat Beranda </span>
+                <span class="uc-chip chip-blue">Telusuri informasi </span>
+                <span class="uc-chip chip-blue">Melihat galeri  </span>
+                <span class="uc-chip chip-blue">melihat Fasilitas </span>
+                <span class="uc-chip chip-blue">melihat lokasi </span>
+                <span class="uc-chip chip-blue">Mengirim Pesan  </span>
+
+            </div>
+        </div>
+
+        <div class="uc-section">
+            <div class="uc-header">
+                <div class="uc-dot" style="background:var(--primary-blue)"></div>
+                <div class="uc-actor-title" style="color:var(--primary-blue)">⚙️ Use Case: Admin </div>
+            </div>
+            <div class="uc-chips">
+                <span class="uc-chip chip-purple">Login Admin </span>
+                <span class="uc-chip chip-purple">Mengelola informasi </span>
+                <span class="uc-chip chip-purple">Update Galeri Foto </span>
+                <span class="uc-chip chip-purple">Mengelola fasilitas</span>
+                <span class="uc-chip chip-purple">membaca pesan  </span>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <strong>Format Penamaan Use Case:</strong><br>
+            Selalu gunakan <strong>kata kerja aktif + objek</strong>. <br>
+            Contoh: ✅ "Kelola Menu" bukan ❌ "Menu" atau "Form Menu".
+        </div>
+    </section>
+
+    <section id="step4">
+        <div class="sec-header">
+            <div class="sec-icon green-icon">🔗</div>
+            <div>
+                <div class="sec-title">Step 4: Hubungan (Relationship)</div>
+                <div class="sec-sub">Relasi antar Use Case berdasarkan logika sistem</div>
+            </div>
+        </div>
+
+        <div class="rel-grid">
+            <div class="rel-card">
+                <div class="rel-head">
+                    <span class="rel-badge bg-inc">&lt;&lt;include&gt;&gt;</span>
+                    <span>Hubungan Wajib</span>
+                </div>
+                <ul class="rel-list">
+                    <li><span class="arrow-text">Mengelola Informasi</span> ➔ Login</li>
+                    <li><span class="arrow-text">Mengelola Galeri</span> ➔ Login</li>
+                    <li><span class="arrow-text">Mengelola Fasilitas</span> ➔ Login</li>
+                    <li><span class="arrow-text">Mengirim Pesan</span> ➔ Login</li>
+                </ul>
+            </div>
+
+            <div class="rel-card">
+                <div class="rel-head">
+                    <span class="rel-badge bg-ext">&lt;&lt;extend&gt;&gt;</span>
+                    <span>Hubungan Opsional</span>
+                </div>
+                <ul class="rel-list">
+                    <li>Membaca Pesan ➔ <span class="arrow-text">Mengirim Pesan</span></li>
+                    <li style="color: #64748b; font-style: italic; border: none; margin-top: 10px;">
+                        *Admin dapat memperluas fungsi untuk membalas/membaca pesan yang dikirim pengunjung.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <strong>Penjelasan Logika:</strong> Relasi <strong>Include</strong> pada diagram menunjukkan bahwa Admin tidak dapat mengelola konten apapun tanpa melakukan verifikasi <strong>Login</strong> terlebih dahulu.
+        </div>
+    </section>
+    </section>
+
+    <section id="step5">
+        <h2>Step 5: Use Case Diagram</h2>
+        <div class="diagram-container">
+            <div class="system-boundary">
+                <div class="system-label">SISTEM INFORMASI WISATA KETAMBE</div>
+                <div class="upload-hint">
+                    <img src="usecase.jpg" alt="Diagram Use Case Ketambe">
+                </div>
+            </div>
+        </div>
+    </section>
+<section class="uml-box">
+
+    <!-- STEP 6 -->
+    <div class="uml-left">
+        <section id="step6">
+        <h3>Step 6: Activity Diagram</h3>
+        <p>Activity Diagram menggambarkan alur aktivitas sistem.</p>
+        <ol>
+            <li>Pengunjung membuka website</li>
+            <li>Sistem menampilkan beranda</li>
+            <li>Pengunjung memilih menu</li>
+            <li>Sistem menampilkan informasi</li>
+            <li>Pengunjung mengirim pesan</li>
+            <li>Sistem menyimpan pesan</li>
+        </ol>
+    </div>
+     <img src="activity.jpg" class="uml-img medium">
+    </div>
+
+</section>
+
+<section class="uml-box">
+
+<div class="uml-left">
+    <section id="step7">
+    <h3>Step 7: Sequence Diagram</h3>
+    <p>Interaksi Pengunjung hingga pesan tersimpan dan dibaca admin.</p>
+</div>
+
+<div class="uml-right seq-adv">
+
+    <!-- ACTOR -->
+    <div class="actor">Pengunjung</div>
+    <div class="actor">Halaman</div>
+    <div class="actor">Control</div>
+    <div class="actor">Database</div>
+
+    <!-- LIFELINE -->
+    <div class="lifeline"></div>
+    <div class="lifeline"></div>
+    <div class="lifeline"></div>
+    <div class="lifeline"></div>
+
+    <!-- ACTIVATION BAR -->
+    <div class="act-bar a1"></div>
+    <div class="act-bar a2"></div>
+    <div class="act-bar a3"></div>
+
+    <!-- REQUEST -->
+    <div class="arrow-line req m1"><span>1. Buka Halaman</span></div>
+    <div class="arrow-line req m2"><span>2. Kirim Pesan</span></div>
+    <div class="arrow-line req m3"><span>2.1 Validasi Data</span></div>
+    <div class="arrow-line req m4"><span>3. Simpan Pesan</span></div>
+
+    <!-- RETURN -->
+    <div class="arrow-line return r1"><span>3.1 Berhasil</span></div>
+    <div class="arrow-line return r2"><span>4. Pesan Tersimpan</span></div>
+
+</div>
+
+</section>
+
+</section>
+
+<section id="step8">
+    <h2 contenteditable="true">Step 8: Class Diagram</h2>
+    <p contenteditable="true" style="line-height:1.8; color:#475569; text-align:justify;">
+        Class Diagram menggambarkan struktur data dan relasi antar kelas dalam sistem. 
+        Diagram ini membantu dalam perancangan database dan logika program.
+    </p>
+   <img src="class.jpg" class="uml-img large">
+
+    <ul contenteditable="true" style="color:#64748b; line-height:1.8; .upload-hint img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+">
+
+        <li><strong>Class Pengunjung</strong> (id, nama, pesan)</li>
+        <li><strong>Class Admin</strong> (id, username, password)</li>
+        <li><strong>Class Wisata</strong> (id, nama_tempat, deskripsi)</li>
+        <li><strong>Class Galeri</strong> (id, foto, keterangan)</li>
+    </ul>
+
+    <div class="tip-box">
+        Class Diagram fokus pada <strong>struktur data (tabel/database)</strong>.
+    </div>
+</section>
+
+<section id="step9">
+    <h2>Step 9: Prototype Website</h2>
+    <p style="line-height:1.8; color:#475569; text-align:justify;">
+        Berikut adalah tampilan prototype website Sistem Informasi Wisata Ketambe 
+        yang telah dibuat. Prototype ini menunjukkan implementasi dari desain yang telah dirancang sebelumnya.
+    </p>
+ 
+    <!-- TOMBOL KE WEBSITE -->
+    <div style="text-align:center; margin:20px 0;">
+        <a href="index copy.html" target="_blank" 
+           style="background:#004aad; color:white; padding:12px 25px; border-radius:8px; text-decoration:none;">
+           🔗 Buka Website
+        </a>
+    </div>
+
+    <!-- ATAU TAMPILKAN LANGSUNG -->
+    <iframe src="index copy.html" 
+            style="width:100%; height:500px; border-radius:12px; border:1px solid #e2e8f0;">
+    </iframe>
+
+    <div class="tip-box">
+        Prototype ini merupakan hasil implementasi dari Use Case, Activity, dan Class Diagram.
+    </div>
+    <!-- LOGIN BUTTON -->
+    <div style="text-align:center; margin-top:30px;">
+        <a href="login.html" target="_blank"
+           style="background:#10b981; color:white; padding:12px 25px; border-radius:8px; text-decoration:none;">
+           🔐 Login Admin
+        </a>
+        
+    <div class="tip-box">
+        Halaman login digunakan oleh admin untuk mengelola data sistem.
+    </div>
+    
+</section>
+
+<section id="step10">
+    <h2>Step 10: Refleksi & Login Website</h2>
+
+    <p style="line-height:1.8; color:#475569; text-align:justify;">
+        Dalam pembuatan sistem ini, saya memahami bagaimana proses analisis hingga implementasi website dilakukan. 
+        Mulai dari perancangan UML, desain tampilan, hingga pembuatan fitur interaktif.
+    </p>
+
+    <ul style="color:#64748b; line-height:1.8;">
+        <li>Memahami konsep Use Case Diagram</li>
+        <li>Belajar membuat tampilan UI dengan HTML & CSS</li>
+        <li>Mengetahui alur sistem dari Activity & Sequence Diagram</li>
+        <li>Mengimplementasikan sistem menjadi website nyata</li>
+    </ul>
+</section>
+
+<script>
+    const sections = document.querySelectorAll("section");
+    const navItems = document.querySelectorAll(".step-item");
+
+    window.onscroll = () => {
+        let current = "";
+        sections.forEach((section) => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 150) {
+                current = section.getAttribute("id");
+            }
+        });
+
+        navItems.forEach((item) => {
+            item.classList.remove("active");
+            if (item.getAttribute("href") === `#${current}`) {
+                item.classList.add("active");
+            }
+        });
+    };
+</script>
+
+</body>
+</html>
